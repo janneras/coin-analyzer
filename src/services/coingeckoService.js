@@ -1,9 +1,9 @@
 import { filterDays } from '../utils/dataUtils';
 
 // Coingeckos public api
-const baseUrl = 'https://api.coingecko.com/api/v3';
-const defaultCoin = 'bitcoin';
-const defaultCurrency = 'eur';
+const BASE_URL = 'https://api.coingecko.com/api/v3';
+const DEFAULT_COIN = 'bitcoin';
+const DEFAULT_CURRENCY = 'eur';
 
 // Data with hourly granularity.
 const localHourly = require('../data/bitcoin_eur_2020_01_19-2020_01_21.json');
@@ -28,13 +28,13 @@ const local5min = require('../data/bitcoin_eur_2021_12_16-2021_12_17.json');
 const getRange = (
   startTime,
   endTime,
-  coin = defaultCoin,
-  currency = defaultCurrency
+  coin = DEFAULT_COIN,
+  currency = DEFAULT_CURRENCY
 ) => {
   // Add hour to end timestamp to make sure we get end dates values at 00:00:00 UTC.
   const endTimeAddHour = Number(endTime) + 3600;
   const response = await fetch(
-    `${baseUrl}/coins/${coin}/market_chart/range?vs_currency=${currency}&from=${startTime}&to=${endTimeAddHour}`,
+    `${BASE_URL}/coins/${coin}/market_chart/range?vs_currency=${currency}&from=${startTime}&to=${endTimeAddHour}`,
     { method: 'GET' }
   );
   return response.json();
@@ -52,8 +52,8 @@ const getRange = (
 const getRangeDays = (
   startTime,
   endTime,
-  coin = defaultCoin,
-  currency = defaultCurrency
+  coin = DEFAULT_COIN,
+  currency = DEFAULT_CURRENCY
 ) => {
   return filterDays(getRange(startTime, endTime, coin, currency));
 };
