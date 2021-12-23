@@ -5,6 +5,8 @@
  * @returns Datapoints at 00:00:00 UTC
  */
 export const filterDays = ({ prices, market_caps, total_volumes }) => {
+  if (!prices && !market_caps && !total_volumes)
+    return { prices: [], market_caps: [], total_volumes: [] };
   // Check if the data is daily, hourly or 5 minutes apart.
   const granularity = getGranularity(prices);
 
