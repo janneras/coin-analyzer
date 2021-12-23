@@ -21,5 +21,8 @@ bitcoin_eur_2021_05_31-2021_06_28.json
   First two datapoints have almost 2 hours in between them.
   Hourly granularity.
 
+bitcoin_eur_2021_12_11-2021_12_13.json
+  Price only increases.
+
 bitcoin_eur_2021_12_16-2021_12_17.json
   5 minute granularity.

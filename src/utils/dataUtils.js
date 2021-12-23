@@ -84,3 +84,31 @@ const getGranularity = (timestampValuePair) => {
   }
   return 1;
 };
+
+export const longestDownwardTrend = (timeValuePairs) => {
+  if (!timeValuePairs) return { start: '', end: '', length: 0 };
+  let n = 0;
+  let start = timeValuePairs[0];
+
+  let longest = {
+    start: '',
+    end: '',
+    length: 0,
+  };
+
+  for (let i = 1; i < timeValuePairs.length; i++) {
+    if (timeValuePairs[i][1] < timeValuePairs[i - 1][1]) {
+      n++;
+      if (n > longest.length) {
+        longest.start = start;
+        longest.end = timeValuePairs[i];
+        longest.length = n;
+      }
+    } else {
+      n = 0;
+      start = timeValuePairs[i];
+    }
+  }
+
+  return longest;
+};

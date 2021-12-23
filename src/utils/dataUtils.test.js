@@ -1,4 +1,4 @@
-import { filterDays } from '../utils/dataUtils';
+import { filterDays, longestDownwardTrend } from '../utils/dataUtils';
 
 // Data with hourly granularity.
 const localHourly = require('../data/bitcoin_eur_2020_01_19-2020_01_21.json');
@@ -12,6 +12,7 @@ const local1 = require('../data/bitcoin_eur_2018_03_01-2018_03_08.json');
 const local2 = require('../data/bitcoin_eur_2019_03_25-2019_04_01.json');
 const local3 = require('../data/bitcoin_eur_2021_01_01-2021_02_28.json');
 const local4 = require('../data/bitcoin_eur_2021_05_31-2021_06_28.json');
+const local5 = require('../data/bitcoin_eur_2021_12_11-2021_12_13.json');
 
 describe('Data filtering', () => {
   test('Data is empty', () => {
@@ -74,5 +75,37 @@ describe('Data filtering', () => {
     const output = filterDays(local4);
     // 29 days
     expect(output.prices).toHaveLength(29);
+  });
+});
+
+describe('Downward trend', () => {
+  test('Data is empty', () => {
+    const output = longestDownwardTrend([]);
+    expect(output).toStrictEqual({ start: '', end: '', length: 0 });
+  });
+
+  test('Data is undefined', () => {
+    const output = longestDownwardTrend();
+    expect(output).toStrictEqual({ start: '', end: '', length: 0 });
+  });
+
+  test('Expect answer to be 2 from localHourly when filtered', () => {
+    const output = longestDownwardTrend(filterDays(localHourly).prices);
+    expect(output.length).toStrictEqual(2);
+  });
+
+  test('Expect answer to be 8 from localDaily', () => {
+    const output = longestDownwardTrend(localDaily.prices);
+    expect(output.length).toStrictEqual(8);
+  });
+
+  test('Expect 1 day downward from local5min', () => {
+    const output = longestDownwardTrend(filterDays(local5min).prices);
+    expect(output.length).toStrictEqual(1);
+  });
+
+  test('When price only increases, expect longest to be 0', () => {
+    const output = longestDownwardTrend(filterDays(local5).prices);
+    expect(output.length).toStrictEqual(0);
   });
 });
