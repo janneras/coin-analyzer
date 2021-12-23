@@ -1,0 +1,22 @@
+bitcoin_eur_2019_03_25-2019_04_01.json
+  Only 16 datapoints between March 26th and 27th day.
+
+bitcoin_eur_2020_01_19-2020_01_21.json
+  Test range provided in the assignment. 2 day downward trend expected.
+  Hourly granularity.
+
+bitcoin_eur_2020_03_01-2021_08_01.json
+  Test range provided in the assignment. 8 day downward trend expected.
+  Daily granularity.
+
+bitcoin_eur_2021_01_01-2021_02_28.json
+  Closest points to 00:00:00 UTC can be over 30 minutes from it.
+  January 17th 00:00:00 UTC datapoint is actually closer to January 16th 23rd hour.
+  Hourly granularity.
+
+bitcoin_eur_2021_05_31-2021_06_28.json
+  First two datapoints have almost 2 hours in between them.
+  Hourly granularity.
+
+bitcoin_eur_2021_12_16-2021_12_17.json
+  5 minute granularity.
