@@ -1,3 +1,6 @@
+bitcoin_eur_2018_03_01-2018_03_08.json
+  Dates indicate hourly granularity but the actually granularity is daily.
+
 bitcoin_eur_2019_03_25-2019_04_01.json
   Only 16 datapoints between March 26th and 27th day.
 
