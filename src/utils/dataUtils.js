@@ -5,22 +5,59 @@
  * @returns Datapoints at 00:00:00 UTC
  */
 export const filterDays = ({ prices, market_caps, total_volumes }) => {
+  // Check if the data is daily, hourly or 5 minutes apart.
   const granularity = getGranularity(prices);
+
+  // If it's daily data, it's always in correct form.
   if (granularity === 1) return { prices, market_caps, total_volumes };
 
-  const newArrayLength = Math.floor(prices.length / granularity);
-
-  return {
-    prices: [...Array(newArrayLength)].map(
-      (item, index) => prices[index * granularity]
-    ),
-    market_caps: [...Array(newArrayLength)].map(
-      (item, index) => market_caps[index * granularity]
-    ),
-    total_volumes: [...Array(newArrayLength)].map(
-      (item, index) => total_volumes[index * granularity]
-    ),
+  // Time to compare to. First timestamp set to 00:00:00UTC on the next day.
+  let compareTime = prices[0][0] - (prices[0][0] % 86400000) + 86400000;
+  const returnObject = {
+    prices: [prices[0]],
+    market_caps: [market_caps[0]],
+    total_volumes: [total_volumes[0]],
   };
+  let diff,
+    prevDiff = compareTime;
+
+  // Find datapoints closests to compareTime
+  for (let i = 1; i < prices.length; i++) {
+    diff = Math.abs(prices[i][0] - compareTime);
+    if (diff < prevDiff) {
+      prevDiff = diff;
+      continue;
+    } else {
+      compareTime += 86400000;
+      prevDiff = Math.abs(prices[i][0] - compareTime);
+
+      // All timestamps are the same for each datagroup.
+      returnObject.total_volumes.push(total_volumes[i - 1]);
+      returnObject.market_caps.push(market_caps[i - 1]);
+      returnObject.prices.push(prices[i - 1]);
+
+      // Skip ahead 9 items to speed the loop up.
+      // Don't go too fast though,
+      // Sometimes there are only 12 hours in a day apparently.
+      i += 9;
+    }
+  }
+
+  // If data is at 5 minute granularity. Check if the last datapoint is
+  // correct.
+  if (granularity === 288) {
+    const lastDate = new Date(prices[prices.length - 1][0]);
+    if (lastDate.getUTCHours() !== 0 || lastDate.getUTCMinutes() > 8)
+      return returnObject;
+  }
+
+  // Add final datapoint to filtered data. It's always correct for
+  // hourly data.
+  returnObject.total_volumes.push(total_volumes[total_volumes.length - 1]);
+  returnObject.market_caps.push(market_caps[market_caps.length - 1]);
+  returnObject.prices.push(prices[prices.length - 1]);
+
+  return returnObject;
 };
 
 /**
@@ -35,8 +72,10 @@ const getGranularity = (timestampValuePair) => {
   const timeDiff = Math.floor(
     (timestampValuePair[1][0] - timestampValuePair[0][0]) * 0.001
   );
-  if (timeDiff < 6000) {
-    if (timeDiff < 1500) {
+  // Less than 10 hours.
+  if (timeDiff < 36000) {
+    // Less than 12 minutes
+    if (timeDiff < 720) {
       return 288;
     }
     return 24;
