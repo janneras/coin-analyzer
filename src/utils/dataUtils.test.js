@@ -1,4 +1,9 @@
-import { filterDays, longestDownwardTrend } from '../utils/dataUtils';
+import {
+  filterDays,
+  longestDownwardTrend,
+  highest,
+  lowest,
+} from '../utils/dataUtils';
 
 // Data with hourly granularity.
 const localHourly = require('../data/bitcoin_eur_2020_01_19-2020_01_21.json');
@@ -107,5 +112,17 @@ describe('Downward trend', () => {
   test('When price only increases, expect longest to be 0', () => {
     const output = longestDownwardTrend(filterDays(local5).prices);
     expect(output.length).toStrictEqual(0);
+  });
+});
+
+describe('Highest and lowest', () => {
+  test('Hourly data maximum price is 8030.890983244613', () => {
+    const output = highest(filterDays(localHourly).prices);
+    expect(output[1]).toStrictEqual(8030.890983244613);
+  });
+
+  test('Hourly data minimum price is 7778.216161699133', () => {
+    const output = lowest(filterDays(localHourly).prices);
+    expect(output[1]).toStrictEqual(7778.216161699133);
   });
 });

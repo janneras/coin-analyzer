@@ -123,12 +123,12 @@ export const longestDownwardTrend = (timeValuePairs) => {
  * @param {Object} timeValuePairs {[Timestamps], [Prices]}-object from coingecko api.
  * @returns {Object} Highest time-value pair.
  */
-export const lowest = (timeValuePairs) => {
+export const highest = (timeValuePairs) => {
   if (!timeValuePairs) return;
   let highest = timeValuePairs[0];
 
   for (let i = 1; i < timeValuePairs.length; i++) {
-    if (timeValuePairs[i][1] > highest) highest = timeValuePairs[i][1];
+    if (timeValuePairs[i][1] > highest[1]) highest = timeValuePairs[i];
   }
 
   return highest;
@@ -144,7 +144,7 @@ export const lowest = (timeValuePairs) => {
   let lowest = timeValuePairs[0];
 
   for (let i = 1; i < timeValuePairs.length; i++) {
-    if (timeValuePairs[i][1] < lowest) lowest = timeValuePairs[i][1];
+    if (timeValuePairs[i][1] < lowest[1]) lowest = timeValuePairs[i];
   }
 
   return lowest;
