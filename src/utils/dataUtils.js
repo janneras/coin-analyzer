@@ -85,6 +85,11 @@ const getGranularity = (timestampValuePair) => {
   return 1;
 };
 
+/**
+ * Find the longest streak of values going down in time-value pairs.
+ * @param {Object} timeValuePairs {[Timestamps], [Prices]}-object from coingecko api.
+ * @returns {Object} Start and end of the streak and the length of that streak.
+ */
 export const longestDownwardTrend = (timeValuePairs) => {
   if (!timeValuePairs) return { start: '', end: '', length: 0 };
   let n = 0;
@@ -111,4 +116,36 @@ export const longestDownwardTrend = (timeValuePairs) => {
   }
 
   return longest;
+};
+
+/**
+ * Find highest value among time-value pairs.
+ * @param {Object} timeValuePairs {[Timestamps], [Prices]}-object from coingecko api.
+ * @returns {Object} Highest time-value pair.
+ */
+export const lowest = (timeValuePairs) => {
+  if (!timeValuePairs) return;
+  let highest = timeValuePairs[0];
+
+  for (let i = 1; i < timeValuePairs.length; i++) {
+    if (timeValuePairs[i][1] > highest) highest = timeValuePairs[i][1];
+  }
+
+  return highest;
+};
+
+/**
+ * Find lowest value among time-value pairs.
+ * @param {Object} timeValuePairs {[Timestamps], [Prices]}-object from coingecko api.
+ * @returns {Object} Lowest time-value pair.
+ */
+export const lowest = (timeValuePairs) => {
+  if (!timeValuePairs) return;
+  let lowest = timeValuePairs[0];
+
+  for (let i = 1; i < timeValuePairs.length; i++) {
+    if (timeValuePairs[i][1] < lowest) lowest = timeValuePairs[i][1];
+  }
+
+  return lowest;
 };
