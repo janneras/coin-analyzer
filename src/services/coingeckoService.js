@@ -48,7 +48,8 @@ const getRangeDays = async (
   coin = DEFAULT_COIN,
   currency = DEFAULT_CURRENCY
 ) => {
-  return await filterDays(getRange(startTime, endTime, coin, currency));
+  const response = await getRange(startTime, endTime, coin, currency);
+  return filterDays(response);
 };
 
 const exports = {

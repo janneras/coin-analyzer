@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { inputDateToDate } from '../utils/dateUtils';
-import { getRangeDays } from '../reducers/coinReducer';
+import { getRangeDays } from '../reducers/coinDataReducer';
 
 const DateRangeSelector = () => {
   // References to update min and max value of date inputs.
