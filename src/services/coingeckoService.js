@@ -18,7 +18,7 @@ const DEFAULT_CURRENCY = 'eur';
  * @param {String} currency Currency to use. Defautl 'eur'.
  * @returns {Object} {prices, market_caps, trading_volumes} for given coin within timeframe.
  */
-const getRange = (
+const getRange = async (
   startTime,
   endTime,
   coin = DEFAULT_COIN,
@@ -42,13 +42,13 @@ const getRange = (
  * @param {String} currency Currency to use. Defautl 'eur'.
  * @returns {Object} {prices, market_caps, trading_volumes} for given coin within timeframe.
  */
-const getRangeDays = (
+const getRangeDays = async (
   startTime,
   endTime,
   coin = DEFAULT_COIN,
   currency = DEFAULT_CURRENCY
 ) => {
-  return filterDays(getRange(startTime, endTime, coin, currency));
+  return await filterDays(getRange(startTime, endTime, coin, currency));
 };
 
 const exports = {

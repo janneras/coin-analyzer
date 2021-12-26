@@ -124,7 +124,7 @@ export const longestDownwardTrend = (timeValuePairs) => {
  * @returns {Object} Highest time-value pair.
  */
 export const highest = (timeValuePairs) => {
-  if (!timeValuePairs) return;
+  if (!timeValuePairs || timeValuePairs.length === 0) return timeValuePairs;
   let highest = timeValuePairs[0];
 
   for (let i = 1; i < timeValuePairs.length; i++) {
@@ -140,7 +140,7 @@ export const highest = (timeValuePairs) => {
  * @returns {Object} Lowest time-value pair.
  */
 export const lowest = (timeValuePairs) => {
-  if (!timeValuePairs) return;
+  if (!timeValuePairs || timeValuePairs.length === 0) return timeValuePairs;
   let lowest = timeValuePairs[0];
 
   for (let i = 1; i < timeValuePairs.length; i++) {

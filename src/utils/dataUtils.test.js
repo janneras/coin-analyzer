@@ -1,9 +1,4 @@
-import {
-  filterDays,
-  longestDownwardTrend,
-  highest,
-  lowest,
-} from '../utils/dataUtils';
+import { filterDays, longestDownwardTrend, highest, lowest } from './dataUtils';
 
 // Data with hourly granularity.
 const localHourly = require('../data/bitcoin_eur_2020_01_19-2020_01_21.json');
@@ -116,6 +111,20 @@ describe('Downward trend', () => {
 });
 
 describe('Highest and lowest', () => {
+  test('Undefined data', () => {
+    const outputHighest = highest();
+    const outputLowest = lowest();
+    expect(outputHighest).toBeUndefined();
+    expect(outputLowest).toBeUndefined();
+  });
+
+  test('Empty array', () => {
+    const outputHighest = highest([]);
+    const outputLowest = lowest([]);
+    expect(outputHighest).toStrictEqual([]);
+    expect(outputLowest).toStrictEqual([]);
+  });
+
   test('Hourly data maximum price is 8030.890983244613', () => {
     const output = highest(filterDays(localHourly).prices);
     expect(output[1]).toStrictEqual(8030.890983244613);
@@ -124,5 +133,43 @@ describe('Highest and lowest', () => {
   test('Hourly data minimum price is 7778.216161699133', () => {
     const output = lowest(filterDays(localHourly).prices);
     expect(output[1]).toStrictEqual(7778.216161699133);
+  });
+
+  test('Negative data', () => {
+    const data = [
+      [0, -1],
+      [1, -2],
+      [2, -3],
+    ];
+    const highestOutput = highest(data);
+    const lowestOutput = lowest(data);
+    expect(highestOutput).toStrictEqual([0, -1]);
+    expect(lowestOutput).toStrictEqual([2, -3]);
+  });
+
+  test('Multiple same values', () => {
+    const data = [
+      [0, 5],
+      [1, 4],
+      [2, 1],
+      [3, 1],
+      [4, 6],
+      [5, 6],
+    ];
+
+    const highestOutput = highest(data);
+    const lowestOutput = lowest(data);
+    // Expect output to be the first encounter of the highest and lowest values.
+    expect(highestOutput).toStrictEqual([4, 6]);
+    expect(lowestOutput).toStrictEqual([2, 1]);
+  });
+
+  test('Only one element in array', () => {
+    const data = [[0, 9]];
+
+    const highestOutput = highest(data);
+    const lowestOutput = lowest(data);
+    expect(highestOutput).toStrictEqual([0, 9]);
+    expect(lowestOutput).toStrictEqual([0, 9]);
   });
 });
