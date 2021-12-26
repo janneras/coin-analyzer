@@ -10,7 +10,7 @@ const CoinDataDisplay = () => {
   const lowestPrice = lowest(coinData.prices);
 
   return (
-    <div>
+    <div className='flexBox content'>
       {`Downward trend in days: ${downwardTrend.length}`}
       <br />
       {`Highest price: ${highestPrice[1]} €`}

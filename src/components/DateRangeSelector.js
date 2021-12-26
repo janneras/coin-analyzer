@@ -30,36 +30,42 @@ const DateRangeSelector = () => {
   }, [startDate, endDate, dispatch]);
 
   return (
-    <div>
-      <label htmlFor='startDate'>From:</label>
-      <input
-        id='startDate'
-        type='date'
-        ref={startDateRef}
-        max={today}
-        defaultValue={lastYearDate.toISOString().split('T')[0]}
-        onChange={(e) => {
-          // Set minimum date for startDate input.
-          endDateRef.current.min = e.target.value;
-          // valueAsNumber is unix timestamp in milliseconds, format to seconds.
-          setStartDate(e.target.valueAsNumber * 0.001);
-        }}
-      />
-      <label htmlFor='endDate'>To:</label>
-      <input
-        id='endDate'
-        type='date'
-        ref={endDateRef}
-        max={today}
-        defaultValue={today}
-        onChange={(e) => {
-          // Set maximum date for endDate input.
-          startDateRef.current.max = e.target.value;
-          // valueAsNumber is unix timestamp in milliseconds, format to seconds.
-          setEndDate(e.target.valueAsNumber * 0.001);
-        }}
-      />
-    </div>
+    <>
+      <h2>Range</h2>
+      <div className='inputWrapper'>
+        <label htmlFor='startDate'>From</label>
+        <input
+          id='startDate'
+          type='date'
+          ref={startDateRef}
+          max={today}
+          defaultValue={lastYearDate.toISOString().split('T')[0]}
+          style={{ marginRight: '4px' }}
+          onChange={(e) => {
+            // Set minimum date for startDate input.
+            endDateRef.current.min = e.target.value;
+            // valueAsNumber is unix timestamp in milliseconds, format to seconds.
+            setStartDate(e.target.valueAsNumber * 0.001);
+          }}
+        />
+      </div>
+      <div className='inputWrapper'>
+        <label htmlFor='endDate'>To</label>
+        <input
+          id='endDate'
+          type='date'
+          ref={endDateRef}
+          max={today}
+          defaultValue={today}
+          onChange={(e) => {
+            // Set maximum date for endDate input.
+            startDateRef.current.max = e.target.value;
+            // valueAsNumber is unix timestamp in milliseconds, format to seconds.
+            setEndDate(e.target.valueAsNumber * 0.001);
+          }}
+        />
+      </div>
+    </>
   );
 };
 

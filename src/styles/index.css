@@ -1,0 +1,86 @@
+body {
+  font-family: monospace;
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(
+      180deg,
+      rgba(187, 129, 198, 1) 0%,
+      rgba(99, 47, 154, 1) 230px,
+      rgba(158, 158, 158, 1) 230px,
+      rgba(158, 158, 158, 1) 233px,
+      rgba(255, 255, 255, 1) 233px,
+      rgba(255, 255, 255, 1) 234px,
+      rgba(240, 240, 240, 1) 234px,
+      rgba(250, 250, 250, 1) 250px,
+      rgba(250, 250, 250, 1) 100%
+    )
+    no-repeat;
+}
+
+h1 {
+  color: white;
+  margin: 0;
+  padding-top: 60px;
+  text-align: center;
+  text-shadow: 0 0 2px #888, 0 0 12px rgba(0, 0, 0, 0.5);
+  font-size: 3rem;
+}
+
+.container {
+  width: 50vw;
+  min-width: 640px;
+  margin: auto;
+  margin-top: 50px;
+  gap: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.flexBox {
+  background: white;
+  border-radius: 16px;
+  border: #aaaaaa solid 3px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  padding: 8px;
+}
+
+.flexBox label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.2rem;
+}
+
+.flexBox input {
+  width: 140px;
+  appearance: none;
+  background: #9a6db4;
+  border: #d8c4b9 solid 3px;
+  border-radius: 5px;
+  color: white;
+  display: inline;
+}
+
+.flexBox input[type='date']::-webkit-calendar-picker-indicator {
+  filter: invert(100%);
+}
+
+.flexBox input:focus {
+  border: #d8a7e1 solid 3px;
+  outline: #f5bcff 1px solid;
+}
+
+.datePicker {
+  flex: 0 0 300px;
+}
+
+.content {
+  flex: 1 0 auto;
+}
+
+.inputWrapper {
+  display: inline-block;
+}
+
+.footer {
+  text-align: center;
+}

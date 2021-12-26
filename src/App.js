@@ -1,13 +1,20 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import CoinDataDisplay from './components/CoinDataDisplay';
-import DateRangeSelector from './components/DateRangeSelector';
+import CoinInfoDisplay from './components/CoinInfoDisplay';
+import './styles/index.css';
 
 export default function App() {
   return (
-    <Fragment>
+    <>
       <h1>Scrooge McDuck Coin Analyzer</h1>
-      <DateRangeSelector />
-      <CoinDataDisplay />
-    </Fragment>
+      <div className='container'>
+        <CoinInfoDisplay />
+        <CoinDataDisplay />
+      </div>
+      <p class='footer'>
+        Janne Räsänen - Vincit Rising Star Pre-assignment 2021 -{' '}
+        <a href='#'>Source code</a>
+      </p>
+    </>
   );
 }
