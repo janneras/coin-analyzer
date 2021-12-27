@@ -11,9 +11,9 @@ export default function App() {
         <CoinInfoDisplay />
         <CoinDataDisplay />
       </div>
-      <p class='footer'>
+      <p className='footer'>
         Janne Räsänen - Vincit Rising Star Pre-assignment 2021 -{' '}
-        <a href='#'>Source code</a>
+        <a href='https://github.com/janneras/coin-analyzer'>Source code</a>
       </p>
     </>
   );

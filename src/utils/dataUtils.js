@@ -64,7 +64,7 @@ export const filterDays = ({ prices, market_caps, total_volumes }) => {
 
 /**
  * Returns how many data points are between the daily data points.
- * @param {Object} timestampValuePair {[Timestamps], [Prices]}-object from coingecko api.
+ * @param {Array} timestampValuePair [[Timestamps, Value]]-Array from coingecko api.
  * @returns Interval value used to determine which points corresponds to daily
  *          datapoints at 00:00:00 UTC
  */
@@ -87,8 +87,8 @@ const getGranularity = (timestampValuePair) => {
 
 /**
  * Find the longest streak of values going down in time-value pairs.
- * @param {Object} timeValuePairs {[Timestamps], [Value]}-object from coingecko api.
- * @returns {Object} Start and end of the streak and the length of that streak.
+ * @param {Array} timestampValuePair [[Timestamps, Value]]-Array from coingecko api.
+ * @returns {Array} Start and end of the streak and the length of that streak.
  */
 export const longestDownwardTrend = (timeValuePairs) => {
   if (!timeValuePairs) return { start: '', end: '', length: 0 };
@@ -120,8 +120,8 @@ export const longestDownwardTrend = (timeValuePairs) => {
 
 /**
  * Find highest value among time-value pairs.
- * @param {Object} timeValuePairs {[Timestamps], [Value]}-object from coingecko api.
- * @returns {Object} Highest time-value pair.
+ * @param {Array} timestampValuePair [[Timestamps, Value]]-Array from coingecko api.
+ * @returns {Array} Highest time-value pair.
  */
 export const highest = (timeValuePairs) => {
   if (!timeValuePairs || timeValuePairs.length === 0) return timeValuePairs;
@@ -136,8 +136,8 @@ export const highest = (timeValuePairs) => {
 
 /**
  * Find lowest value among time-value pairs.
- * @param {Object} timeValuePairs {[Timestamps], [Value]}-object from coingecko api.
- * @returns {Object} Lowest time-value pair.
+ * @param {Array} timestampValuePair [[Timestamps, Value]]-Array from coingecko api.
+ * @returns {Array} Lowest time-value pair.
  */
 export const lowest = (timeValuePairs) => {
   if (!timeValuePairs || timeValuePairs.length === 0) return timeValuePairs;
@@ -148,4 +148,60 @@ export const lowest = (timeValuePairs) => {
   }
 
   return lowest;
+};
+
+export const timeToBuySell = (timeValuePairs) => {
+  const landScape = peaksAndValleys(timeValuePairs);
+};
+
+/**
+ * Find all the valleys and peaks in values data.
+ * @param {Array} timestampValuePair [[Timestamps, Value]]-Array from coingecko api.
+ * @returns Peaks and valleys of prices data.
+ */
+const peaksAndValleys = (timeValuePairs) => {
+  if (!timeValuePairs || timeValuePairs.length < 2)
+    return { peaks: [], valleys: [] };
+
+  // Determine the starting direction. False is down, true is up.
+  let direction =
+    timeValuePairs[1][1] - timeValuePairs[0][1] < 0 ? false : true;
+  let newDirection;
+
+  const landscape = { peaks: [], valleys: [] };
+
+  // Add first datapoint as valley or a peak.
+  if (direction) {
+    landscape.valleys.push(timeValuePairs[0]);
+  } else {
+    landscape.peaks.push(timeValuePairs[0]);
+  }
+
+  /**
+   * Go through all datapoints only storing the ones that
+   * change direction as valleys and peaks.
+   */
+  for (let i = 1; i < timeValuePairs.length - 1; i++) {
+    newDirection =
+      timeValuePairs[i + 1][1] - timeValuePairs[i][1] < 0 ? false : true;
+
+    if (direction !== newDirection) {
+      if (direction) {
+        landscape.peaks.push(timeValuePairs[i]);
+      } else {
+        landscape.valleys.push(timeValuePairs[i]);
+      }
+    } else continue;
+
+    direction = newDirection;
+  }
+
+  // Add last datapoint as peak or a valley.
+  if (direction) {
+    landscape.peaks.push(timeValuePairs[timeValuePairs.length - 1]);
+  } else {
+    landscape.valleys.push(timeValuePairs[timeValuePairs.length - 1]);
+  }
+
+  return landscape;
 };

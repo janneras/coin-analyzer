@@ -8,6 +8,8 @@ const initialState = {
   prices: [],
   market_caps: [],
   total_volumes: [],
+  startTime: 0,
+  endTime: 0,
 };
 
 /**
@@ -38,7 +40,7 @@ export const getRange = (startTime, endTime) => {
     const coin = await coingeckoService.getRange(startTime, endTime);
     dispatch({
       type: 'COIN_GETRANGE',
-      data: coin,
+      data: { ...coin, startTime, endTime },
     });
   };
 };
@@ -54,7 +56,7 @@ export const getRangeDays = (startTime, endTime) => {
     const coin = await coingeckoService.getRangeDays(startTime, endTime);
     dispatch({
       type: 'COIN_GETRANGEDAYS',
-      data: coin,
+      data: { ...coin, startTime, endTime },
     });
   };
 };

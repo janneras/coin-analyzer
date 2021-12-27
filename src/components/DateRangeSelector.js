@@ -40,7 +40,6 @@ const DateRangeSelector = () => {
           ref={startDateRef}
           max={today}
           defaultValue={lastYearDate.toISOString().split('T')[0]}
-          style={{ marginRight: '4px' }}
           onChange={(e) => {
             // Set minimum date for startDate input.
             endDateRef.current.min = e.target.value;
