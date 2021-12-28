@@ -27,3 +27,12 @@ export const inputDateToDate = (
 
   return date;
 };
+
+/**
+ * Returns formatted date.
+ * @param {Number} timestamp UNIX timestamp
+ * @returns Returns human-readable date.
+ */
+export const formatDate = (timestamp) => {
+  return new Date(timestamp).toLocaleDateString();
+};

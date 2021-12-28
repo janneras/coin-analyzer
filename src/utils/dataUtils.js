@@ -150,58 +150,38 @@ export const lowest = (timeValuePairs) => {
   return lowest;
 };
 
-export const timeToBuySell = (timeValuePairs) => {
-  const landScape = peaksAndValleys(timeValuePairs);
-};
-
 /**
- * Find all the valleys and peaks in values data.
+ * Find best time to buy and sell within timeValuePairs.
  * @param {Array} timestampValuePair [[Timestamps, Value]]-Array from coingecko api.
- * @returns Peaks and valleys of prices data.
+ * @returns {Object} {buy, sell, maxProfit}-Object telling best timeValuePair to buy
+ *                   and sell and also the profit gained from it.
  */
-const peaksAndValleys = (timeValuePairs) => {
-  if (!timeValuePairs || timeValuePairs.length < 2)
-    return { peaks: [], valleys: [] };
+export const timeToBuySell = (timeValuePairs) => {
+  if (!timeValuePairs || timeValuePairs.length === 0) return;
 
-  // Determine the starting direction. False is down, true is up.
-  let direction =
-    timeValuePairs[1][1] - timeValuePairs[0][1] < 0 ? false : true;
-  let newDirection;
-
-  const landscape = { peaks: [], valleys: [] };
-
-  // Add first datapoint as valley or a peak.
-  if (direction) {
-    landscape.valleys.push(timeValuePairs[0]);
-  } else {
-    landscape.peaks.push(timeValuePairs[0]);
-  }
+  let buy = timeValuePairs[0],
+    sell = timeValuePairs[0],
+    maxProfit = 0;
 
   /**
-   * Go through all datapoints only storing the ones that
-   * change direction as valleys and peaks.
+   * Iterate through the list recording lowest value in the progress.
+   * If the current profit from recorded lowest value is higher than
+   * current maximum, record the sell point and the max profit.
    */
-  for (let i = 1; i < timeValuePairs.length - 1; i++) {
-    newDirection =
-      timeValuePairs[i + 1][1] - timeValuePairs[i][1] < 0 ? false : true;
-
-    if (direction !== newDirection) {
-      if (direction) {
-        landscape.peaks.push(timeValuePairs[i]);
-      } else {
-        landscape.valleys.push(timeValuePairs[i]);
+  for (let i = 1; i < timeValuePairs.length; i++) {
+    if (timeValuePairs[i][1] < buy[1]) {
+      buy = timeValuePairs[i];
+      continue;
+    } else {
+      const profit = timeValuePairs[i][1] - buy[1];
+      if (profit > maxProfit) {
+        sell = timeValuePairs[i];
+        maxProfit = profit;
       }
-    } else continue;
-
-    direction = newDirection;
+    }
   }
 
-  // Add last datapoint as peak or a valley.
-  if (direction) {
-    landscape.peaks.push(timeValuePairs[timeValuePairs.length - 1]);
-  } else {
-    landscape.valleys.push(timeValuePairs[timeValuePairs.length - 1]);
-  }
+  const percent = (maxProfit / buy[1]) * 100;
 
-  return landscape;
+  return { buy, sell, maxProfit, percent };
 };

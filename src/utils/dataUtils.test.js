@@ -1,4 +1,10 @@
-import { filterDays, longestDownwardTrend, highest, lowest } from './dataUtils';
+import {
+  filterDays,
+  longestDownwardTrend,
+  highest,
+  lowest,
+  timeToBuySell,
+} from './dataUtils';
 
 // Data with hourly granularity.
 const localHourly = require('../data/bitcoin_eur_2020_01_19-2020_01_21.json');
@@ -171,5 +177,15 @@ describe('Highest and lowest', () => {
     const lowestOutput = lowest(data);
     expect(highestOutput).toStrictEqual([0, 9]);
     expect(lowestOutput).toStrictEqual([0, 9]);
+  });
+});
+
+describe('Best time to buy and sell', () => {
+  test('Empty array and undefined are handled', () => {
+    const outputEmpty = timeToBuySell([]);
+    const outputUndefined = timeToBuySell();
+
+    expect(outputEmpty).toBeUndefined();
+    expect(outputUndefined).toBeUndefined();
   });
 });
