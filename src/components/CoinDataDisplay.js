@@ -6,6 +6,7 @@ import HighestValue from './CoinData/HighestValue';
 
 const CoinDataDisplay = () => {
   const coinData = useSelector((state) => state.coinData);
+  const coinInfo = useSelector((state) => state.coinInfo);
   const startDate = new Date(coinData.startTime * 1000).toLocaleDateString();
   const endDate = new Date(coinData.endTime * 1000).toLocaleDateString();
 
@@ -14,12 +15,16 @@ const CoinDataDisplay = () => {
       {coinData.prices.length > 0 ? (
         <>
           <h2>{`From ${startDate} to ${endDate}`}</h2>
-          <DownwardTrend prices={coinData.prices} />
+          <DownwardTrend
+            prices={coinData.prices}
+            currency={coinInfo.currency}
+          />
           <HighestValue
             valueName={'trading volume'}
             timeValuePairs={coinData.total_volumes}
+            currency={coinInfo.currency}
           />
-          <BuyAndSell prices={coinData.prices} />
+          <BuyAndSell prices={coinData.prices} currency={coinInfo.currency} />
         </>
       ) : (
         <>

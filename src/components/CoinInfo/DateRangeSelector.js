@@ -1,9 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { inputDateToDate } from '../utils/dateUtils';
-import { getRangeDays } from '../reducers/coinDataReducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { inputDateToDate } from '../../utils/dateUtils';
+import { getRangeDays } from '../../reducers/coinDataReducer';
 
 const DateRangeSelector = () => {
+  const coinInfo = useSelector((state) => state.coinInfo);
   // References to update min and max value of date inputs.
   const startDateRef = useRef();
   const endDateRef = useRef();
@@ -25,9 +26,11 @@ const DateRangeSelector = () => {
   // useEffect to dispatch given range to coinReducer to fetch data.
   useEffect(() => {
     if (startDate && endDate) {
-      dispatch(getRangeDays(startDate, endDate));
+      dispatch(
+        getRangeDays(startDate, endDate, coinInfo.id, coinInfo.currency)
+      );
     }
-  }, [startDate, endDate, dispatch]);
+  }, [startDate, endDate, coinInfo, dispatch]);
 
   return (
     <>

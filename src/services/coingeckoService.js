@@ -15,7 +15,7 @@ const DEFAULT_CURRENCY = 'eur';
  * @param {String} startTime Unix timestamp for starting time.
  * @param {String} endTime Unix timestamp for ending time.
  * @param {String} coin Cryptocurrency to get. Default 'bitcoin'.
- * @param {String} currency Currency to use. Defautl 'eur'.
+ * @param {String} currency Currency to use. Default 'eur'.
  * @returns {Object} {prices, market_caps, trading_volumes} for given coin within timeframe.
  */
 const getRange = async (
@@ -39,7 +39,7 @@ const getRange = async (
  * @param {String} startTime Unix timestamp for starting time.
  * @param {String} endTime Unix timestamp for ending time.
  * @param {String} coin Cryptocurrency to get. Default 'bitcoin'.
- * @param {String} currency Currency to use. Defautl 'eur'.
+ * @param {String} currency Currency to use. Default 'eur'.
  * @returns {Object} {prices, market_caps, trading_volumes} for given coin within timeframe.
  */
 const getRangeDays = async (
@@ -52,9 +52,23 @@ const getRangeDays = async (
   return filterDays(response);
 };
 
+/**
+ * Get simple info on the coin.
+ * @param {String} coin Cryptocurrency to get. Default 'bitcoin'.
+ * @returns Info of the coin.
+ */
+const getCoinInfo = async (coin = DEFAULT_COIN) => {
+  const response = await fetch(
+    `${BASE_URL}/coins/${coin}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`,
+    { method: 'GET' }
+  );
+  return response.json();
+};
+
 const exports = {
   getRange,
   getRangeDays,
+  getCoinInfo,
 };
 
 export default exports;

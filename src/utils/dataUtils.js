@@ -181,7 +181,12 @@ export const timeToBuySell = (timeValuePairs) => {
     }
   }
 
-  const percent = (maxProfit / buy[1]) * 100;
+  let percent;
+
+  // Calculate the percentile change in value.
+  // Watch out division by 0.
+  if (buy[1] === 0) percent = -1;
+  else percent = (maxProfit / buy[1]) * 100;
 
   return { buy, sell, maxProfit, percent };
 };

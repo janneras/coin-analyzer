@@ -3,13 +3,13 @@ import { formatCurrency } from '../../utils/currencyUtils';
 import { timeToBuySell } from '../../utils/dataUtils';
 import { formatDate } from '../../utils/dateUtils';
 
-const BuyAndSell = ({ prices }) => {
+const BuyAndSell = ({ prices, currency }) => {
   const buySell = timeToBuySell(prices);
   const buyDate = formatDate(buySell.buy[0]);
   const sellDate = formatDate(buySell.sell[0]);
-  const buyValue = formatCurrency(buySell.buy[1]);
-  const sellValue = formatCurrency(buySell.sell[1]);
-  const profit = formatCurrency(buySell.maxProfit);
+  const buyValue = formatCurrency(buySell.buy[1], currency);
+  const sellValue = formatCurrency(buySell.sell[1], currency);
+  const profit = formatCurrency(buySell.maxProfit, currency);
 
   return (
     <>

@@ -35,12 +35,17 @@ const coinDataReducer = (state = initialState, action) => {
  * @param {*} endTime Unix timestamp of the end.
  * @returns Dispatch COIN_GETRANGE
  */
-export const getRange = (startTime, endTime) => {
+export const getRange = (startTime, endTime, coin = '', currency = '') => {
   return async (dispatch) => {
-    const coin = await coingeckoService.getRange(startTime, endTime);
+    const coinData = await coingeckoService.getRange(
+      startTime,
+      endTime,
+      coin,
+      currency
+    );
     dispatch({
       type: 'COIN_GETRANGE',
-      data: { ...coin, startTime, endTime },
+      data: { ...coinData, startTime, endTime },
     });
   };
 };
@@ -51,12 +56,17 @@ export const getRange = (startTime, endTime) => {
  * @param {*} endTime Unix timestamp of the end.
  * @returns Dispatch COIN_GETRANGEDAYS
  */
-export const getRangeDays = (startTime, endTime) => {
+export const getRangeDays = (startTime, endTime, coin, currency) => {
   return async (dispatch) => {
-    const coin = await coingeckoService.getRangeDays(startTime, endTime);
+    const coinData = await coingeckoService.getRangeDays(
+      startTime,
+      endTime,
+      coin,
+      currency
+    );
     dispatch({
       type: 'COIN_GETRANGEDAYS',
-      data: { ...coin, startTime, endTime },
+      data: { ...coinData, startTime, endTime },
     });
   };
 };

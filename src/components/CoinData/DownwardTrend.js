@@ -3,12 +3,12 @@ import { formatCurrency } from '../../utils/currencyUtils';
 import { longestDownwardTrend } from '../../utils/dataUtils';
 import { formatDate } from '../../utils/dateUtils';
 
-const DownwardTrend = ({ prices }) => {
+const DownwardTrend = ({ prices, currency }) => {
   const downwardTrend = longestDownwardTrend(prices);
   const startDate = formatDate(downwardTrend.start[0]);
   const endDate = formatDate(downwardTrend.end[0]);
-  const startValue = formatCurrency(downwardTrend.start[1]);
-  const endValue = formatCurrency(downwardTrend.end[1]);
+  const startValue = formatCurrency(downwardTrend.start[1], currency);
+  const endValue = formatCurrency(downwardTrend.end[1], currency);
   const lengthString =
     downwardTrend.length === 1
       ? `${downwardTrend.length} day`

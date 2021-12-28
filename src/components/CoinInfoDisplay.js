@@ -1,10 +1,12 @@
 import React from 'react';
-import DateRangeSelector from './DateRangeSelector';
+import CoinSimpleInfo from './CoinInfo/CoinSimpleInfo';
+import DateRangeSelector from './CoinInfo/DateRangeSelector';
 
 const CoinInfoDisplay = () => {
   return (
     <div className='flexBox datePicker'>
       <DateRangeSelector />
+      <CoinSimpleInfo />
     </div>
   );
 };

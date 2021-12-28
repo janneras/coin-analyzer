@@ -3,9 +3,9 @@ import { formatCurrency } from '../../utils/currencyUtils';
 import { highest } from '../../utils/dataUtils';
 import { formatDate } from '../../utils/dateUtils';
 
-const HighestValue = ({ valueName, timeValuePairs }) => {
+const HighestValue = ({ valueName, timeValuePairs, currency }) => {
   const highestValue = highest(timeValuePairs);
-  const highestFormatted = formatCurrency(highestValue[1]);
+  const highestFormatted = formatCurrency(highestValue[1], currency);
   const date = formatDate(highestValue[0]);
 
   return (

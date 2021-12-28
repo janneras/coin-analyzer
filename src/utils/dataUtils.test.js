@@ -23,6 +23,7 @@ const local5 = require('../data/bitcoin_eur_2021_12_11-2021_12_13.json');
 describe('Data filtering', () => {
   test('Data is empty', () => {
     const output = filterDays({});
+
     expect(output).toStrictEqual({
       prices: [],
       market_caps: [],
@@ -32,12 +33,13 @@ describe('Data filtering', () => {
 
   test('Daily data is passed back as same', () => {
     const output = filterDays(localDaily);
+
     expect(output).toStrictEqual(localDaily);
   });
 
   test('Hourly data constains 3 datapoints. 19th, 20th and 21st', () => {
     const output = filterDays(localHourly);
-    expect(output.prices).toHaveLength(3);
+
     const prices = [...output.prices];
     // 2020-01-19 at 00:04:42.472 UTC
     const firstDay = 1579392282472;
@@ -46,6 +48,7 @@ describe('Data filtering', () => {
     // 2020-01-21 at 00:07:43.674 UTC
     const lastDay = 1579565263674;
 
+    expect(output.prices).toHaveLength(3);
     expect(prices[0][0]).toStrictEqual(firstDay);
     expect(prices[1][0]).toStrictEqual(secondDay);
     expect(prices[2][0]).toStrictEqual(lastDay);
@@ -53,22 +56,26 @@ describe('Data filtering', () => {
 
   test('5 minute interval returns 2 data points', () => {
     const output = filterDays(local5min);
+
     expect(output.prices).toHaveLength(2);
   });
 
   test('Identify data as daily even though first and last day indicates hourly data', () => {
     const output = filterDays(local1);
+
     expect(output).toStrictEqual(local1);
   });
 
   test('Only 16 data points are present in one day', () => {
     const output = filterDays(local2);
+
     // 2019-03-25 - 2019-04-01 is 8 days
     expect(output.prices).toHaveLength(8);
   });
 
   test('Closest value to 00:00:00 UTC is over 30 minutes away.', () => {
     const output = filterDays(local3);
+
     // 59 days
     expect(output.prices).toHaveLength(59);
 
@@ -79,6 +86,7 @@ describe('Data filtering', () => {
 
   test('First datapoints have 1 hour 50 minutes between them', () => {
     const output = filterDays(local4);
+
     // 29 days
     expect(output.prices).toHaveLength(29);
   });
@@ -87,31 +95,37 @@ describe('Data filtering', () => {
 describe('Downward trend', () => {
   test('Data is empty', () => {
     const output = longestDownwardTrend([]);
+
     expect(output).toStrictEqual({ start: '', end: '', length: 0 });
   });
 
   test('Data is undefined', () => {
     const output = longestDownwardTrend();
+
     expect(output).toStrictEqual({ start: '', end: '', length: 0 });
   });
 
   test('Expect answer to be 2 from localHourly when filtered', () => {
     const output = longestDownwardTrend(filterDays(localHourly).prices);
+
     expect(output.length).toStrictEqual(2);
   });
 
   test('Expect answer to be 8 from localDaily', () => {
     const output = longestDownwardTrend(localDaily.prices);
+
     expect(output.length).toStrictEqual(8);
   });
 
   test('Expect 1 day downward from local5min', () => {
     const output = longestDownwardTrend(filterDays(local5min).prices);
+
     expect(output.length).toStrictEqual(1);
   });
 
   test('When price only increases, expect longest to be 0', () => {
     const output = longestDownwardTrend(filterDays(local5).prices);
+
     expect(output.length).toStrictEqual(0);
   });
 });
@@ -120,6 +134,7 @@ describe('Highest and lowest', () => {
   test('Undefined data', () => {
     const outputHighest = highest();
     const outputLowest = lowest();
+
     expect(outputHighest).toBeUndefined();
     expect(outputLowest).toBeUndefined();
   });
@@ -127,17 +142,20 @@ describe('Highest and lowest', () => {
   test('Empty array', () => {
     const outputHighest = highest([]);
     const outputLowest = lowest([]);
+
     expect(outputHighest).toStrictEqual([]);
     expect(outputLowest).toStrictEqual([]);
   });
 
   test('Hourly data maximum price is 8030.890983244613', () => {
     const output = highest(filterDays(localHourly).prices);
+
     expect(output[1]).toStrictEqual(8030.890983244613);
   });
 
   test('Hourly data minimum price is 7778.216161699133', () => {
     const output = lowest(filterDays(localHourly).prices);
+
     expect(output[1]).toStrictEqual(7778.216161699133);
   });
 
@@ -147,8 +165,10 @@ describe('Highest and lowest', () => {
       [1, -2],
       [2, -3],
     ];
+
     const highestOutput = highest(data);
     const lowestOutput = lowest(data);
+
     expect(highestOutput).toStrictEqual([0, -1]);
     expect(lowestOutput).toStrictEqual([2, -3]);
   });
@@ -165,6 +185,7 @@ describe('Highest and lowest', () => {
 
     const highestOutput = highest(data);
     const lowestOutput = lowest(data);
+
     // Expect output to be the first encounter of the highest and lowest values.
     expect(highestOutput).toStrictEqual([4, 6]);
     expect(lowestOutput).toStrictEqual([2, 1]);
@@ -175,6 +196,7 @@ describe('Highest and lowest', () => {
 
     const highestOutput = highest(data);
     const lowestOutput = lowest(data);
+
     expect(highestOutput).toStrictEqual([0, 9]);
     expect(lowestOutput).toStrictEqual([0, 9]);
   });
@@ -187,5 +209,90 @@ describe('Best time to buy and sell', () => {
 
     expect(outputEmpty).toBeUndefined();
     expect(outputUndefined).toBeUndefined();
+  });
+
+  test('Only decreasing values', () => {
+    const data = [
+      [0, 10],
+      [0, 9],
+      [0, 8],
+      [0, 7],
+      [0, 6],
+      [0, 5],
+      [0, 4],
+      [0, 3],
+      [0, 2],
+      [0, 1],
+    ];
+
+    const output = timeToBuySell(data);
+
+    expect(output.maxProfit).toStrictEqual(0);
+  });
+
+  test('Only one value in data', () => {
+    const data = [[1, 1]];
+    const output = timeToBuySell(data);
+
+    expect(output.maxProfit).toStrictEqual(0);
+  });
+
+  test('Some negative values', () => {
+    const data = [
+      [0, -10],
+      [0, 9],
+      [0, -8],
+      [0, 7],
+      [0, 6],
+      [0, 5],
+      [0, -4],
+      [0, 3],
+      [0, 2],
+      [0, -1],
+    ];
+
+    const output = timeToBuySell(data);
+
+    const expectedOutput = {
+      buy: [0, -10],
+      sell: [0, 9],
+      maxProfit: 19,
+      percent: -190,
+    };
+
+    expect(output).toStrictEqual(expectedOutput);
+  });
+
+  test('Hourly data is decreasing only', () => {
+    const output = timeToBuySell(filterDays(localHourly).prices);
+
+    expect(output.maxProfit).toStrictEqual(0);
+  });
+
+  test('Best time to buy and sell is late in the array', () => {
+    const data = [
+      [0, 1],
+      [0, 9],
+      [0, 9],
+      [0, 6],
+      [0, 4],
+      [0, 0],
+      [0, 1],
+      [0, 3],
+      [0, 2],
+      [0, 10],
+    ];
+
+    const output = timeToBuySell(data);
+
+    // Division by 0, expect percent to be -1.
+    const expectedOutput = {
+      buy: [0, 0],
+      sell: [0, 10],
+      maxProfit: 10,
+      percent: -1,
+    };
+
+    expect(output).toStrictEqual(expectedOutput);
   });
 });
