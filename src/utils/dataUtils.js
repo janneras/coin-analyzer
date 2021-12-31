@@ -163,6 +163,13 @@ export const timeToBuySell = (timeValuePairs) => {
     sell = timeValuePairs[0],
     maxProfit = 0;
 
+  let returnObj = {
+    buy,
+    sell,
+    maxProfit,
+    percent: 0,
+  };
+
   /**
    * Iterate through the list recording lowest value in the progress.
    * If the current profit from recorded lowest value is higher than
@@ -177,6 +184,7 @@ export const timeToBuySell = (timeValuePairs) => {
       if (profit > maxProfit) {
         sell = timeValuePairs[i];
         maxProfit = profit;
+        returnObj = { buy, sell, maxProfit };
       }
     }
   }
@@ -188,5 +196,5 @@ export const timeToBuySell = (timeValuePairs) => {
   if (buy[1] === 0) percent = -1;
   else percent = (maxProfit / buy[1]) * 100;
 
-  return { buy, sell, maxProfit, percent };
+  return { ...returnObj, percent };
 };
