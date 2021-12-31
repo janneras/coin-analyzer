@@ -41,3 +41,7 @@ Tests can be run with
 To build
 
 	$ npm run build
+	
+## Pre-assignment tasks
+
+All the functions for the pre-assingment tasks can be found in `src/utils/dataUtils.js` file.
